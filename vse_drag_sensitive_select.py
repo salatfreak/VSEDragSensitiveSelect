@@ -32,7 +32,7 @@ class DragSensitiveSelectOperator(bpy.types.Operator):
         self._cancel = 'RIGHTMOUSE' if self._select == 'LEFTMOUSE' else 'LEFTMOUSE'
         
         # Only do something if invoked by select mouse button
-        if event.type != self._select: return {'CANCELLED'}
+        if event.type != self._select: return {'CANCELLED', 'PASS_THROUGH'}
         
         # Get mouse position, frame and channel
         mouse_x = event.mouse_region_x
@@ -107,15 +107,13 @@ def register():
     # Register operator
     bpy.utils.register_class(DragSensitiveSelectOperator)
     
-    # Get mouse button roles
-    keyconfig = bpy.context.window_manager.keyconfigs.active
-    select_mouse = getattr(keyconfig.preferences, 'select_mouse', 'LEFT') + 'MOUSE'
-    
-    # Create keymap
+    # Create keymap for left and right mouse button to be able to react
+    # whether the "Select With" preference is set to right or left
     keymap = bpy.context.window_manager.keyconfigs.addon.keymaps.new(
         name='Sequencer', space_type='SEQUENCE_EDITOR'
     )
-    keymap.keymap_items.new(DragSensitiveSelectOperator.bl_idname, select_mouse, 'PRESS')
+    keymap.keymap_items.new(DragSensitiveSelectOperator.bl_idname, 'LEFTMOUSE', 'PRESS')
+    keymap.keymap_items.new(DragSensitiveSelectOperator.bl_idname, 'RIGHTMOUSE', 'PRESS')
 
 # Unregister add-on
 def unregister():
