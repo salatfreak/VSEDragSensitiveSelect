@@ -41,7 +41,7 @@ class DragSensitiveSelectOperator(bpy.types.Operator):
         frame, channel = view.region_to_view(mouse_x, mouse_y)
         
         strip = next((
-            s for s in context.scene.sequence_editor.sequences
+            s for s in context.sequences
             if s.channel == int(channel) \
                 and s.frame_final_start <= frame and frame < s.frame_final_end
         ), None)      
