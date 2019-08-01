@@ -18,6 +18,7 @@ import bpy
 class DragSensitiveSelectOperator(bpy.types.Operator):
     bl_idname = "sequencer.drag_sensitive_select"
     bl_label = "Drag Sensitive Select"
+    bl_options = {'REGISTER', 'INTERNAL'}
     
     # Only show if select enabled
     @classmethod
@@ -29,7 +30,6 @@ class DragSensitiveSelectOperator(bpy.types.Operator):
         # Get mouse button roles
         keyconfig = context.window_manager.keyconfigs.active
         self._select = getattr(keyconfig.preferences, 'select_mouse', 'LEFT') + 'MOUSE'
-        self._cancel = 'RIGHTMOUSE' if self._select == 'LEFTMOUSE' else 'LEFTMOUSE'
         
         # Only do something if invoked by select mouse button
         if event.type != self._select: return {'CANCELLED', 'PASS_THROUGH'}
@@ -122,6 +122,7 @@ def unregister():
     
     # Remove keymap
     for item in keymap.keymap_items: keymap.keymap_items.remove(item)
+    keymap = None
     
 # Register on script execution
 if __name__ == '__main__':
