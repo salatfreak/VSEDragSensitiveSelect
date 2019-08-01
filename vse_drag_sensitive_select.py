@@ -117,6 +117,8 @@ def register():
 
 # Unregister add-on
 def unregister():
+    global keymap
+    
     # Unegister operator
     bpy.utils.unregister_class(DragSensitiveSelectOperator)
     
